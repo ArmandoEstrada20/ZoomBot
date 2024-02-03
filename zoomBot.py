@@ -4,6 +4,7 @@ from time import sleep
 from threading import Thread
 import tkinter as tk
 from tkinter import *
+from tkinter import messagebox
 from tkinter.ttk import Combobox
 
 
@@ -25,10 +26,9 @@ class ZoomBotGUI:
 
         self.home_page()
     
-    def show_error(self, text, pos):
+    def show_error(self, text):
          # Muestra mensajes de error en la GUI
-        self.err_text = Label(self.window, text=text, font=("montserrat", 10), fg="red", bg="#f0f1f1")
-        self.err_text.place(x=pos[0], y=pos[1])
+         messagebox.showerror("Error", text)
 
     def schedule_meeting(self):
         # Programa reuniones utilizando la biblioteca 'schedule' y 'webbrowser'
@@ -39,7 +39,8 @@ class ZoomBotGUI:
             'Martes':  schedule.every().tuesday,
             'Miércoles': schedule.every().wednesday,
             'Jueves': schedule.every().thursday,
-            'Viernes': schedule.every().friday
+            'Viernes': schedule.every().friday,
+            'Sábado': schedule.every().saturday
         }
         if day in days:
             days[day].at(time).do(webbrowser.open_new_tab, link)
@@ -66,9 +67,9 @@ class ZoomBotGUI:
                 self.time.delete(0, END)
                 self.select_weekday.set('') #El combobox se reinicia
             else:
-                self.show_error("El enlace de la reunión no es valido...", (26, 187))
+                self.show_error("El enlace de la reunión no es valido.")
         else:
-            self.show_error("Error en la hora de la reunion, asegurate de escribirla en formato de 24 horas...", (26, 275))
+            self.show_error("Asegurate de escribirla en formato de 24 horas.")
 
     def clear_entries(self):
         self.link.delete(0, END)
@@ -80,7 +81,7 @@ class ZoomBotGUI:
         alto_entry = int(25 * 1.75)  
 
         # Añade una etiqueta para el Entry 'nombre'
-        name_label = Label(self.window, text="Nombre de la reunión:", font=("monserrat", 14), bg="#f0f1f1")
+        name_label = Label(self.window, text="Nombre de la reunión:", font=("montserrat", 14), bg="#f0f1f1")
         name_label.place(x=26, y=95 - alto_entry * 0.5 - 4) 
         self.name = Entry(self.window, font=("montserrat", 14))
         self.name.place(x=26, y=95, width=ancho_entry, height=alto_entry)
@@ -92,7 +93,7 @@ class ZoomBotGUI:
         self.link.place(x=26, y=162, width=ancho_entry, height=alto_entry)
 
         # Añade una etiqueta para el Entry 'hora'
-        time_label = Label(self.window, text="Hora de la reunión:", font=("monserrat", 14), bg="#f0f1f1")
+        time_label = Label(self.window, text="Hora de la reunión:", font=("montserrat", 14), bg="#f0f1f1")
         time_label.place(x=26, y=250 - alto_entry * 0.5 - 4) 
 
         self.time = Entry(self.window, font=("montserrat", 14))
@@ -101,7 +102,7 @@ class ZoomBotGUI:
         ancho_combobox = int(30 * 1.75) 
 
         # Añade una etiqueta para el Combobox 'select_weekday'
-        weekday_label = Label(self.window, text="Día de la reunión:", font=("monserrat", 14), bg="#f0f1f1")
+        weekday_label = Label(self.window, text="Día de la reunión:", font=("montserrat", 14), bg="#f0f1f1")
         weekday_label.place(x=26, y=334 - alto_entry * 0.5 - 4) 
 
         self.select_weekday = Combobox(self.window, width=ancho_combobox, textvariable=tk.StringVar())
@@ -113,8 +114,7 @@ class ZoomBotGUI:
         self.schedule_btn.place(x=150, y=500)
 
         self.clear_btn = Button(self.window, text="Limpiar panel de reuniones", command=self.clear_listbox, borderwidth=1, bg="#DAD400")
-        #self.clear_btn.place(x=150, y=570)
-
+    
         # Ajusta el ancho y la altura
         ancho_listbox = 60 
         alto_listbox = 30  
